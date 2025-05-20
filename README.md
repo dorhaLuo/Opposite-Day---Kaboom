@@ -1,36 +1,12 @@
-This is an unfinished game!
+Play the game on GitHub:
+https://dorhaluo.github.io/Opposite-Day---Kaboom/
 
-Here are things to be done...
-1. There is no way to win. Make a way to get to the win screen.
-2. Make some new levels.
-3. Possibly add new characters or other aspects to the game.
-4. Fix up the visual parts to make it look better. 
-You may not use any images of real people. 
-(Automatic zero if any real person images are used)
 
-Make a fork of this game. Play it, and look at the code. Then begin making it your own. 
-You may use AI to help you!
 
 The default size for the blocks is 48x48, if you add new characters or pictures make them that size before uploading them.
 
 
-
-
-
-
-// Load assets
-loadSprite("player", "https://codehs.com/uploads/414539541ad23f60e9d8f5f03e01176c");
-loadSprite("goal", "https://codehs.com/uploads/566ed6cd252b069f132487dc8e794440");
-loadSprite("block", "https://codehs.com/uploads/626e90a8fc7df801b3496ea88da16546");
-loadSprite("spike", "https://codehs.com/uploads/36087e76d19941952f6fd7936c2d96ef");
-loadSprite("door", "https://codehs.com/uploads/676c938c8c5060edbfe688da15401c81");
-loadSprite("key", "https://codehs.com/uploads/397c9dc36639dc61ba5622e7cae2c17d");
-
-
-
-
-
-
+// Images I might use
 doorway
 https://www.google.com/imgres?imgurl=https%3A%2F%2Fmedia.istockphoto.com%2Fid%2F1297455031%2Fvector%2Fcastle-medieval-doors-cartoon-ancient-fortress-wooden-gates-medieval-kingdom-castles-gate.jpg%3Fs%3D612x612%26w%3D0%26k%3D20%26c%3D-ura7cq0d0UwD4tmjTHVzLQHOzsPY8GNx_IUOQ2LZe8%3D&tbnid=XchA_7eApJ4PKM&vet=12ahUKEwip2uaK4JGNAxXEcjABHQbVF60QxiAoB3oECAAQJw..i&imgrefurl=https%3A%2F%2Fwww.istockphoto.com%2Fillustrations%2Fold-door&docid=O1mO5gD0NdKBmM&w=612&h=324&itg=1&q=doorway%202d&ved=2ahUKEwip2uaK4JGNAxXEcjABHQbVF60QxiAoB3oECAAQJw&safe=active&ssui=on
 
