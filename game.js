@@ -56,6 +56,71 @@ loadSprite("cat-sprite", "https://codehs.com/uploads/fb465904e9208aa4cac658cf39a
 })
 
 
+function effects(type, player, object = null, position = (0,0), txtLebel=null){
+    
+    switch (type) {
+      case "jump":
+        if (player.isGrounded() || levelCount == 2) {
+			player.jump(spaceCtrl[levelCount]*JUMPPOWER)
+			player.play("jump")
+		}
+        break;
+      case "left":
+        player.move(-SPEED, 0)
+		player.flipX = true
+		player.play("run")
+        break;
+      case "right":
+        player.move(SPEED, 0)
+		player.flipX = false
+		player.play("run")
+        break;
+      case "score": // aka key
+        destroy(object)
+		play("score")
+		hasK = true
+		//hasKLabel.text = "Key: YES"
+      case "food":
+        // eat the fish
+		destroy(object)
+		play("munch")
+		HungerIDX++
+		//hungerIdxLabel.text = "Food: " + HungerIDX
+        break;
+      case "danger":
+        // cat's reaction
+		play("screech")
+		// getting out of the water makes the cat hungrier
+		HungerIDX--
+		
+		player.pos = position
+		// Go to "lose" scene when we hit a "danger"
+		go("die")
+        break;
+      case "portal":
+        if (hasK){
+            play("portal")
+    		levelCount++
+    		if (levelCount < LEVELS.length - 1) {
+    			// If there's a next level, go() to the same scene but load the next level
+    			go("game", {
+    				hungerIdx: HungerIDX,
+    			})
+    		} else {
+    			// Otherwise we have reached the end of game, go to "win" scene!
+    			go("win")
+    		}
+	    }
+        break;
+      default :
+        day = "Friday";
+        break;
+    }
+
+}
+
+
+
 const TILE_COLUMNS = 25; // tiles horizontally
 const TILE_ROWS = 16;    // tiles vertically
 
@@ -71,6 +136,7 @@ const SPEED = 480 * SCALE
 const JUMPPOWER = 1000
 let levelCount = 0
 let HungerIDX = 5
+let hasK = false
 
 const spaceCtrl = [1,1.5,1.3,1.1,1.2]
 const leftCtrl = []
@@ -92,7 +158,22 @@ const COLORS = {
     highlight: [147, 112, 219] // Light purple
 };
 
+//
+const LeftControls = [
+    ["left"],
+    ["left"],
+    ["right"],
+    ["left"],
+    ["right"]
+]
 
+const RightControls = [
+    ["right"],
+    ["right"],
+    ["left"],
+    ["right"],
+    ["left"]
+]
 
 
 
@@ -478,7 +559,7 @@ scene("instructions", () => {
 
 // Define a scene called "game". The callback will be run when we go() to the scene
 // Scenes can accept argument from go()
-scene("game", ({  hasK }) => {
+scene("game", () => {
     
     
 	// Use the level passed, or first level
@@ -541,24 +622,26 @@ scene("game", ({  hasK }) => {
 
 
 	
-	// Movements
+	/*/ Movements - CONTROLS
 	onKeyPress("space", () => {
 		if (player.isGrounded() || levelCount == 2) {
 			player.jump(spaceCtrl[levelCount]*JUMPPOWER)
 			player.play("jump")
 		}
+	})/*/
+	
+	onKeyPress("space", () => {
+	    effects("jump", player)
 	})
 
 	onKeyDown("left", () => {
-		player.move(-SPEED, 0)
-		player.flipX = true
-		player.play("run")
+	    
+		effects(LeftControls[levelCount][0], player)
 	})
 
 	onKeyDown("right", () => {
-		player.move(SPEED, 0)
-		player.flipX = false
-		player.play("run")
+	    
+		effects(RightControls[levelCount][0], player)
 	})
 
 	;["left", "right","space"].forEach((key) => {
@@ -577,31 +660,20 @@ scene("game", ({  hasK }) => {
     
     
     
-    // Collisions
+    // Collisions and CONTROLS - use switch
 
 	player.onCollide("water", () => {
-	    // cat's reaction
-		play("screech")
-		// getting out of the water makes the cat hungrier
-		HungerIDX--
-		
-		player.pos = level.tile2Pos(1, 0)
-		// Go to "lose" scene when we hit a "danger"
-		go("die")
+	    effects("danger", player, level.tile2Pos(1, 0))
+	    //player.pos = level.tile2Pos(1, 0)
 	})
 
 	player.onCollide("key", (key) => {
-		destroy(key)
-		play("score")
-		hasK = true
+		effects("score", player, key, undefined, hasKLabel)
 		hasKLabel.text = "Key: YES"
 	})
 	player.onCollide("fish", (fish) => {
-	    // eat the fish
-		destroy(fish)
-		play("munch")
-		HungerIDX++
-		hungerIdxLabel.text = "Food: " + HungerIDX
+	    effects("food", player, fish, undefined, hungerIdxLabel)
+	    hungerIdxLabel.text = "Food: " + HungerIDX
 	})
 
 	// Fall death
@@ -613,19 +685,7 @@ scene("game", ({  hasK }) => {
 
 	// Enter the next level on portal
 	player.onCollide("portal", () => {
-	    if (hasK){
-            play("portal")
-    		levelCount++
-    		if (levelCount < LEVELS.length - 1) {
-    			// If there's a next level, go() to the same scene but load the next level
-    			go("game", {
-    				hungerIdx: HungerIDX,
-    			})
-    		} else {
-    			// Otherwise we have reached the end of game, go to "win" scene!
-    			go("win")
-    		}
-	    }
+	    effects("portal", player)
 		
 	})
 
@@ -735,9 +795,9 @@ scene("win", () => {
 
 function start(name) {
 	// Start with the "game" scene, with initial parameters
+	hasK = false
 	go(name, {
 		hungerIdx: HungerIDX,
-		hasK: false,
 	})
 }
 
