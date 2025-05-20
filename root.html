@@ -1,0 +1,136 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opposite Day - Mysterious Cat Adventure</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #0c0c14;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Courier New', monospace;
+            background-image: url('https://codehs.com/uploads/8f91dd85950df1a05899ed6cada690a7');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        #game-container {
+            position: relative;
+            width: 800px;
+            height: 500px;
+            box-shadow: 0 0 30px rgba(106, 90, 205, 0.7);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        canvas {
+            border-radius: 8px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        #loading-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0c0c14 0%, #1a1a2e 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        
+        #loading-screen h1 {
+            color: #e6e6fa;
+            font-size: 36px;
+            text-shadow: 0 0 10px #9370db;
+            margin-bottom: 20px;
+        }
+        
+        #loading-bar {
+            width: 60%;
+            height: 20px;
+            background-color: #2d2d42;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        #loading-progress {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #7b68ee 0%, #9370db 100%);
+            transition: width 0.5s ease;
+        }
+        
+        #game-title {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #e6e6fa;
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 0 0 10px #9370db;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="loading-screen">
+            <h1>OPPOSITE DAY</h1>
+            <div id="loading-bar">
+                <div id="loading-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/kaboom@3000/dist/kaboom.js"></script>
+    <script>
+    kaboom()
+    </script>
+    <script>
+        // Simulate loading progress
+        const progressBar = document.getElementById('loading-progress');
+        const loadingScreen = document.getElementById('loading-screen');
+        let progress = 0;
+        
+        const loadingInterval = setInterval(() => {
+            progress += 5;
+            progressBar.style.width = progress + '%';
+            
+            if (progress >= 100) {
+                clearInterval(loadingInterval);
+                setTimeout(() => {
+                    loadingScreen.style.opacity = '0';
+                    loadingScreen.style.transition = 'opacity 1s ease';
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                        initGame();
+                    }, 1000);
+                }, 500);
+            }
+        }, 100);
+        
+        function initGame() {
+            // Initialize game after loading is complete
+            const script = document.createElement('script');
+            script.src = 'game.js';
+            document.body.appendChild(script);
+        }
+    </script>
+</body>
+</html>
